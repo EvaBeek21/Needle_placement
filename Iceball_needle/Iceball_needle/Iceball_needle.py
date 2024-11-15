@@ -120,6 +120,20 @@ class Iceball_needleWidget(ScriptedLoadableModuleWidget, VTKObservationMixin):
         self.secondTargetButton.toolTip = "Automatically calculate the second target within the volume."
         self.layout.addWidget(self.secondTargetButton)
         self.secondTargetButton.connect('clicked(bool)', self.onPlaceSecondTarget)
+
+        # 3D Volume Selector
+        self.volumeSelectorLabel2 = qt.QLabel("Select volume to calculate AI iceball on:")
+        self.layout.addWidget(self.volumeSelectorLabel2)
+
+        self.volumeIceSelector = slicer.qMRMLNodeComboBox()
+        self.volumeIceSelector.nodeTypes = ["vtkMRMLScalarVolumeNode"]
+        self.volumeIceSelector.selectNodeUponCreation = True
+        self.volumeIceSelector.addEnabled = False
+        self.volumeIceSelector.removeEnabled = False
+        self.volumeIceSelector.noneEnabled = False
+        self.volumeIceSelector.setMRMLScene(slicer.mrmlScene)
+        self.volumeIceSelector.setToolTip("Select the volume to calculate AI Iceball.")
+        self.layout.addWidget(self.volumeIceSelector)
         
         # Calculate AI Iceball
         self.AIiceball = qt.QPushButton("Calculate AI Iceball")
@@ -974,5 +988,5 @@ class Iceball_needleWidget(ScriptedLoadableModuleWidget, VTKObservationMixin):
         firstNeedle = [0.0, 0.0, 0.0]
         markupsNodeTarget.GetNthControlPointPosition(0, firstNeedle) #retrieves location of first needle
         
-        
-        print(bestPoint)
+        volume = self.volumeIceSelector.currentNode() #load volume to calculate iceball on
+        print(volume)
